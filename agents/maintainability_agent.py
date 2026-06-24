@@ -67,6 +67,10 @@ def maintainability_agent(diff: str, context: str = "", memory_context: str = ""
 
 
 async def amaintainability_agent(diff: str, context: str = "", memory_context: str = "", tool_output: str = "") -> str:
-    result = await aget_llm_response(_build_prompt(diff, context, memory_context, tool_output))
-    print(f"🏗️ Maintainability Agent done: {len(result)} chars")
-    return result
+    try:
+        result = await aget_llm_response(_build_prompt(diff, context, memory_context, tool_output))
+        print(f"🏗️ Maintainability Agent done: {len(result)} chars")
+        return result
+    except Exception as e:
+        print(f"🏗️ Maintainability Agent failed: {e}")
+        return "Unable to complete maintainability review due to service error. Manual review recommended."

@@ -65,6 +65,10 @@ def test_agent(diff: str, memory_context: str = "") -> str:
 
 
 async def atest_agent(diff: str, memory_context: str = "") -> str:
-    result = await aget_llm_response(_build_prompt(diff, memory_context))
-    print(f"🧪 Test Agent done: {len(result)} chars")
-    return result
+    try:
+        result = await aget_llm_response(_build_prompt(diff, memory_context))
+        print(f"🧪 Test Agent done: {len(result)} chars")
+        return result
+    except Exception as e:
+        print(f"🧪 Test Agent failed: {e}")
+        return "Unable to complete test coverage review due to service error. Manual review recommended."

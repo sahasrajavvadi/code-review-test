@@ -29,5 +29,9 @@ Thumbs.db
 # ChromaDB local data
 chroma_data/
 
+*.log
+server.log
+server_err.log
+
 # Temp workspaces created by the reviewer
 ai-reviewer-*/

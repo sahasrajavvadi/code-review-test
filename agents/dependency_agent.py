@@ -39,6 +39,10 @@ def dependency_agent(diff: str, tool_output: str = "", memory_context: str = "")
 
 
 async def adependency_agent(diff: str, tool_output: str = "", memory_context: str = "") -> str:
-    result = await aget_llm_response(_build_prompt(diff, tool_output, memory_context))
-    print(f"📦 Dependency Agent done: {len(result)} chars")
-    return result
+    try:
+        result = await aget_llm_response(_build_prompt(diff, tool_output, memory_context))
+        print(f"📦 Dependency Agent done: {len(result)} chars")
+        return result
+    except Exception as e:
+        print(f"📦 Dependency Agent failed: {e}")
+        return "Unable to complete dependency review due to service error. Manual review recommended."

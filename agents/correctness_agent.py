@@ -78,6 +78,10 @@ def correctness_agent(diff: str, memory_context: str = "") -> str:
 
 
 async def acorrectness_agent(diff: str, memory_context: str = "") -> str:
-    result = await aget_llm_response(_build_prompt(diff, memory_context))
-    print(f"🔍 Correctness Agent done: {len(result)} chars")
-    return result
+    try:
+        result = await aget_llm_response(_build_prompt(diff, memory_context))
+        print(f"🔍 Correctness Agent done: {len(result)} chars")
+        return result
+    except Exception as e:
+        print(f"🔍 Correctness Agent failed: {e}")
+        return "Unable to complete correctness review due to service error. Manual review recommended."

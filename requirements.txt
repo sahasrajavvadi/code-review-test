@@ -4,6 +4,7 @@ langchain
 langgraph
 langchain-groq
 langchain-google-genai
+langchain-ollama
 chromadb
 supabase
 python-dotenv

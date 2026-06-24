@@ -49,6 +49,10 @@ Apply the suggestions from the review manually.
 
 Generate fixes for as many actionable findings as possible."""
 
-    result = get_llm_response(prompt)
-    print(f"🔧 Auto-Fix Agent done: {len(result)} chars")
-    return result
+    try:
+        result = get_llm_response(prompt)
+        print(f"🔧 Auto-Fix Agent done: {len(result)} chars")
+        return result
+    except Exception as e:
+        print(f"🔧 Auto-Fix Agent failed: {e}")
+        return "### No Auto-Fixes Available\nAuto-fix agent encountered an error. Please review the findings manually."

@@ -30,7 +30,7 @@ class ReviewState(TypedDict):
 # --- Specialist agent nodes (all async, run in parallel) ---
 
 async def run_correctness(state: ReviewState) -> dict:
-    print("\n  🔍 Running Correctness & Reliability Agent...")
+    print("\n  [CORRECTNESS] Running Correctness & Reliability Agent...")
     result = await acorrectness_agent(
         state["diff"],
         memory_context=state.get("memory_context", ""),
@@ -39,7 +39,7 @@ async def run_correctness(state: ReviewState) -> dict:
 
 
 async def run_security(state: ReviewState) -> dict:
-    print("\n  🔴 Running Security Agent...")
+    print("\n  [SECURITY] Running Security Agent...")
     tools = state.get("tool_outputs", {})
     tool_text = "\n".join(filter(None, [tools.get("bandit", ""), tools.get("detect-secrets", "")]))
     result = await asecurity_agent(
@@ -51,7 +51,7 @@ async def run_security(state: ReviewState) -> dict:
 
 
 async def run_performance(state: ReviewState) -> dict:
-    print("\n  🟡 Running Performance Agent...")
+    print("\n  [PERFORMANCE] Running Performance Agent...")
     tools = state.get("tool_outputs", {})
     result = await aperformance_agent(
         state["diff"],
@@ -62,7 +62,7 @@ async def run_performance(state: ReviewState) -> dict:
 
 
 async def run_maintainability(state: ReviewState) -> dict:
-    print("\n  🏗️ Running Maintainability Agent...")
+    print("\n  [MAINTAINABILITY] Running Maintainability Agent...")
     tools = state.get("tool_outputs", {})
     tool_text = "\n".join(filter(None, [tools.get("ruff", ""), tools.get("eslint", "")]))
     result = await amaintainability_agent(
@@ -75,7 +75,7 @@ async def run_maintainability(state: ReviewState) -> dict:
 
 
 async def run_dependency(state: ReviewState) -> dict:
-    print("\n  📦 Running Dependency Agent...")
+    print("\n  [DEPENDENCY] Running Dependency Agent...")
     tools = state.get("tool_outputs", {})
     result = await adependency_agent(
         state["diff"],
@@ -86,7 +86,7 @@ async def run_dependency(state: ReviewState) -> dict:
 
 
 async def run_test(state: ReviewState) -> dict:
-    print("\n  🧪 Running Test Agent...")
+    print("\n  [TEST] Running Test Agent...")
     result = await atest_agent(
         state["diff"],
         memory_context=state.get("memory_context", ""),
@@ -97,7 +97,7 @@ async def run_test(state: ReviewState) -> dict:
 # --- Post-review nodes (sequential after fan-in) ---
 
 def run_manager(state: ReviewState) -> dict:
-    print("\n  ⚡ Running Manager Agent (merge decision)...")
+    print("\n  [MANAGER] Running Manager Agent (merge decision)...")
     result = critic_agent(
         state["correctness_review"],
         state["security_review"],
@@ -110,15 +110,15 @@ def run_manager(state: ReviewState) -> dict:
 
 
 def run_autofix(state: ReviewState) -> dict:
-    print("\n  🔧 Running Auto-Fix Agent...")
+    print("\n  [AUTOFIX] Running Auto-Fix Agent...")
     result = autofix_agent(state["diff"], state["final_review"])
     return {"autofix_suggestions": result}
 
 
 def run_scorer(state: ReviewState) -> dict:
-    print("\n  📊 Scoring review quality...")
+    print("\n  [SCORER] Scoring review quality...")
     score = score_review(state["final_review"])
-    print(f"  Review quality score: {score}/10")
+    print(f"  Score: {score}/10")
     return {"score": score}
 
 

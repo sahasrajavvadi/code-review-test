@@ -62,6 +62,10 @@ def security_agent(diff: str, memory_context: str = "", tool_output: str = "") -
 
 
 async def asecurity_agent(diff: str, memory_context: str = "", tool_output: str = "") -> str:
-    result = await aget_llm_response(_build_prompt(diff, memory_context, tool_output))
-    print(f"🔴 Security Agent done: {len(result)} chars")
-    return result
+    try:
+        result = await aget_llm_response(_build_prompt(diff, memory_context, tool_output))
+        print(f"🔴 Security Agent done: {len(result)} chars")
+        return result
+    except Exception as e:
+        print(f"🔴 Security Agent failed: {e}")
+        return "Unable to complete security review due to service error. Manual review recommended."
