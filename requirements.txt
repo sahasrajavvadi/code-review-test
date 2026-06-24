@@ -1,0 +1,20 @@
+fastapi
+uvicorn
+langchain
+langgraph
+langchain-groq
+langchain-google-genai
+chromadb
+supabase
+python-dotenv
+PyGithub
+langsmith
+requests
+# Static analysis tools — agents use their output for grounded reviews
+bandit
+ruff
+detect-secrets
+pip-audit
+radon
+# Per-repo config support
+pyyaml
